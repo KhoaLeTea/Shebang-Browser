@@ -12,10 +12,9 @@ chrome.omnibox.onInputEntered.addListener(function(text, disposition) {
           text: text
         },
         function(response) {
-          console.log("received something");
-          alert(response.response);
-        }).catch(onError);
-  }).then();
+          console.log("message recieve status: " + response.response);
+        });
+  });
 
 });
 

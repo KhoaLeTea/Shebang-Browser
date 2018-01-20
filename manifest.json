@@ -6,15 +6,8 @@
   "version": "1.0",
   "omnibox": { "keyword": "$" },
 
-  "content_scripts": [
-    {
-      "matches": ["http://*/*"],
-      "css": ["content_scripts/parse.css"],
-      "js": ["content_scripts/jquery.min.js", "content_scripts/main.js"]
-    }
-  ],
   "permissions": ["declarativeContent", "activeTab"],
-  "page_action": {
+  "browser_action": {
     "default_icon": "popup/icon.png",
     "default_title": "#!Browser",
     "default_popup": "popup/popup.html"

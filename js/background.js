@@ -32,5 +32,6 @@ chrome.runtime.onMessage.addListener(function(message) {
   console.log("message recieved: " + message.tabOpened);
   if (message.tabOpened) {
     chrome.tabs.create({"url": "terminal_tab.html"});
+    // possible: send a message to the new tab with the history
   }
 });

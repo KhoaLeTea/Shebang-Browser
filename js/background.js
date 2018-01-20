@@ -15,11 +15,13 @@ chrome.omnibox.onInputEntered.addListener(function(text, disposition) {
           text: text
         },
         function(response) {
-          console.log("message recieve status: " + response.response);
+          console.log("message recieve status: " + response.status);
         });
   });
+  
   arr.push(text);
   historySize = arr.length;
+  
   // the universal storage for all terminal inputs and outputs
   chrome.storage.sync.set({'history':
     arr

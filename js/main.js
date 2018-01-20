@@ -16,7 +16,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.show) {
     $('.bash').show();
   }
-  sendResponse({response: "Ok"});
+  sendResponse({status: "Ok"});
 });
 
 var Bash = function (selector, options) {
@@ -201,4 +201,11 @@ var bsh = new Bash(container, {
 
 $('.bash-button.close').click(function() {
   $('.bash').hide();
+});
+
+$('.bash-button.max').click(function() {
+  $('.bash').hide();
+  // something to transfer the bash history
+  window.open(chrome.extension.getURL('terminal_tab.html'));
+
 });

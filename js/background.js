@@ -1,10 +1,9 @@
 console.log("Hello from the #!Browser");
 
-// store the history
 var arr = [];
 var historySize = 0;
 
-chrome.omnibox.onInputEntered.addListener(function(text) {
+chrome.omnibox.onInputEntered.addListener(function(text, disposition) {
   chrome.tabs.query({
       active: true,
       currentWindow: true
@@ -19,13 +18,12 @@ chrome.omnibox.onInputEntered.addListener(function(text) {
           console.log("message recieve status: " + response.status);
         });
   });
-
-  console.log(arr)
+  
   arr.push(text);
-  historySize+=1;
+  historySize = arr.length;
+  
   // the universal storage for all terminal inputs and outputs
   chrome.storage.sync.set({'history':
     arr
   });
-
 });

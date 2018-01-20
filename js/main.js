@@ -9,7 +9,6 @@ $('.bash .window .header').append("<a href=\"#\" class=\"bash-button max\"></a>"
 $('.bash .window .header').append("<br/>")
 $('.bash .window').append("<div class=\"terminal\"></div>");
 
-
 $('.bash').hide();
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -115,7 +114,6 @@ var Bash = function (selector, options) {
     };
 
     this.start = function () {
-        alert(history.length);
         // print out history if the length is not 0
         if (history.length != 0) {
           for (var i=0; i < history.length; i++) {
@@ -179,6 +177,7 @@ var Bash = function (selector, options) {
             self.start();
         }
     };
+    self.initialise();
 };
 
 var container = document.querySelector('.bash');

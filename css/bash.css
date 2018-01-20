@@ -4,12 +4,11 @@
     -moz-box-sizing:border-box;
     box-sizing:border-box;
 }
-.bash .button {
-    display:block;
+.bash .bash-button {
+    display: inline-block;
     float:left;
-    width:10px;
-    height:10px;
-    margin: 2px 8px 2px 0;
+    width:13px;
+    height:13px;
     border-radius:100%;
 }
 .bash .close {
@@ -98,4 +97,24 @@
     .bash .window {
         width:100%;
     }
+}
+
+.bash {
+  width: '500px';
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  z-index: 99999;
+}
+
+.bash .bash-button.close {
+  background-color:  #ff5c5c;
+}
+
+.bash .bash-button.max {
+  background-color: #00ca56;
+}
+
+.bash-button.max, .bash-button.min {
+  margin-left: 6px;
 }

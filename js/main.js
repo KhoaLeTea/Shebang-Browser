@@ -2,15 +2,14 @@ $('body').append("<div class=\"bash\"></div>");
 $('.bash').append("<div class=\"window\"></div>");
 $('.bash .window').append("<div class=\"header\"></div>");
 
-$('.bash .window .header').append("<a href=\"#\" class=\"button max\"></a><br/>");
+
+$('.bash .window .header').append("<a href=\"#\" class=\"bash-button close\"></a>");
+$('.bash .window .header').append("<a href=\"#\" class=\"bash-button disabled min\"></a>");
+$('.bash .window .header').append("<a href=\"#\" class=\"bash-button max\"></a>");
+$('.bash .window .header').append("<br/>")
 $('.bash .window').append("<div class=\"terminal\"></div>");
 
-$('.bash').css('width', '500px');
-$('.bash').css('position', 'fixed');
-$('.bash').css('top', '5px');
-$('.bash').css('right', '5px');
-$('.bash').css('z-index', '99999');
-$('.bash .button.max').css('float', 'right')
+
 $('.bash').hide();
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -198,4 +197,8 @@ var bsh = new Bash(container, {
       return next();
     });
   }
+});
+
+$('.bash-button.close').click(function() {
+  $('.bash').hide();
 });

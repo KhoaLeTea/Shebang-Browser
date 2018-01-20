@@ -16,8 +16,27 @@ chrome.omnibox.onInputChanged.addListener(function (text, suggest) {
     }
 });
 
+function sendMessageToTabs(tabs) {
+  for (let tab of tabs) {
+    chrome.tabs.sendMessage({
+      tab.id,
+      {greeting: "Hi from background script"}
+    }, function() {
+      console.log("Message from the content script:");
+      console.log(response.response);
+    }).catch(onError);
+  }
+}
+
 
 chrome.omnibox.onInputEntered.addListener(function(text) {
-    // chrome.tabs.create({url:"popup/popup.html"});
-    console.log("help");
+
+  chrome.tabs.query({
+      active: true,
+      currentWindow: true
+  }, function(tabs) {
+      console.log(tabs);
+      sendMessageToTabs(tabs).catch(onError);
+  });
+
 });

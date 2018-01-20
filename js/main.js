@@ -5,15 +5,22 @@ $('body').append("<div class=\"bash\"></div>");
 $('.bash').append("<div class=\"window\"></div>");
 $('.bash .window').append("<div class=\"header\"></div>");
 
-$('.bash .window .header').append("<a href=\"#\" class=\"button max\"></a>");
+$('.bash .window .header').append("<a href=\"#\" class=\"button max\"></a><br/>");
 $('.bash .window').append("<div class=\"terminal\"></div>");
 
-$('.bash').css('width', '50%');
+$('.bash').css('width', '500px');
 $('.bash').css('position', 'fixed');
 $('.bash').css('top', '5px');
 $('.bash').css('right', '5px');
 $('.bash').css('z-index', '99999');
-$('.bash.button').css('float', 'right')
+$('.bash .button.max').css('float', 'right')
+$('.bash').hide();
+
+chrome.runtime.onMessage.addListener(request => {
+  console.log("Message from the background script:");
+  console.log(request.greeting);
+  return Promise.resolve({response: "Hi from content script"});
+});
 
 var Bash = function (selector, options) {
 

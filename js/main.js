@@ -31,6 +31,8 @@ var Bash = function (selector, options) {
         name = options.name || undefined,
         func = options.function || undefined,
         demo = options.demo || false,
+        //ex: {"ls": function(){self.post()}}
+        commands = options.commandList || undefined,
 
         // Variables
         history = [],
@@ -141,8 +143,9 @@ var Bash = function (selector, options) {
             command.removeAttribute('class');
             if (request === "") {
                 self.reset();
-            } else if (request === name) {
-                func(self, function () {
+            } else if (request in commands) {
+                var commandFunction = commands[request]
+                commandFunction(self, function () {
                     self.reset();
                     history.push(request);
                 });
@@ -182,10 +185,7 @@ var Bash = function (selector, options) {
 };
 
 var container = document.querySelector('.bash');
-var bsh = new Bash(container, {
-  name: 'grunt',
-  prompt: '$',
-  function: function(bash, next) {
+var commands = {"grunt" : function(bash, next) {
     bash.post('Running "jshint:gruntfile" (jshint) task', 0, false, true);
     bash.post('>> 1 file lint free.', 500, false, true);
     bash.post('&nbsp;', 600);
@@ -196,7 +196,16 @@ var bsh = new Bash(container, {
     bash.post('Done, without errors.', 2000, false, true, function() {
       return next();
     });
-  }
+  },
+    "ls" : function(bash, next){
+        bash.post('Look at all of these directories', 0, false, true, function(){
+            return next();
+        });
+    }};
+var bsh = new Bash(container, {
+  name: 'grunt',
+  prompt: '$',
+  commandList: commands 
 });
 
 $('.bash-button.close').click(function() {

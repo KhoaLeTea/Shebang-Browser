@@ -1,5 +1,6 @@
 /*jslint browser:true*/
 
+
 var Bash = function (selector, options) {
 
     'use strict';
@@ -18,7 +19,6 @@ var Bash = function (selector, options) {
 
         // Variables
         history = [],
-        current = history.length,
         self = this;
 
     if (!String.prototype.trim) {
@@ -99,6 +99,13 @@ var Bash = function (selector, options) {
     };
 
     this.start = function () {
+        alert(history.length);
+        // print out history if the length is not 0
+        if (history.length != 0) {
+          for (var i=0, i < history.length; i++) {
+            self.post(history[i], 0);
+          }
+        }
         self.post('Last login: ' + this.time() + ' on ' + computer, 300, false, true, function () {
             if (help) {
                 self.post(help, 150, false, true);
@@ -124,7 +131,6 @@ var Bash = function (selector, options) {
                 func(self, function () {
                     self.reset();
                     history.push(request);
-                    current = history.length;
                 });
             } else if (request === 'clear') {
                 self.clear(function () {
@@ -135,25 +141,20 @@ var Bash = function (selector, options) {
                 self.post(message === '' ? '&nbsp;' : message, 0, false, true, function () {
                     self.reset();
                     history.push(request);
-                    current = history.length;
                 });
             } else {
                 self.post('-bash: ' + request.split(' ')[0] + ': command not found', 0, false, true, function () {
                     self.reset();
                     history.push(request);
-                    current = history.length;
                 });
             }
-        } else if (key === 38 && current > 0) {
-            current -= 1;
-            command.innerHTML = history[current];
-        } else if (key === 40 && current < history.length - 1) {
-            current += 1;
-            command.innerHTML = history[current];
         }
     });
 
     this.initialise = function () {
+        chrome.storage.sync.get('history', function (result) {
+            history = result.history;
+        });
         if (demo && func) {
             func(self, function () {
                 return true;
@@ -162,7 +163,4 @@ var Bash = function (selector, options) {
             self.start();
         }
     };
-
-    this.initialise();
-
 };

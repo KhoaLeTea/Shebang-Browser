@@ -115,7 +115,6 @@ var Bash = function (selector, options) {
     };
 
     this.start = function () {
-        alert(history.length);
         // print out history if the length is not 0
         if (history.length != 0) {
           for (var i=0; i < history.length; i++) {
@@ -179,6 +178,7 @@ var Bash = function (selector, options) {
             self.start();
         }
     };
+
     self.initialise();
 };
 
@@ -207,8 +207,13 @@ $('.bash-button.close').click(function() {
 $('.bash-button.max').click(function() {
   $('.bash').hide();
   // something to transfer the bash history
-  terminal_tab = chrome.extension.getURL('terminal_tab.html');
-  console.log(chrome.extension.getURL('terminal_tab.html'));
-  window.open(terminal_tab);
-
+  // terminal_tab = chrome.extension.getURL('terminal_tab.html');
+  // console.log(chrome.extension.getURL('terminal_tab.html'));
+  // window.open(terminal_tab);
+  // send a message to background.js saying to open a new tab
+  // background.js will open terminal_tab.html
+  // somehow either terminal_tab (main.js) or background.js will pull chrome.storage.sync the bash history
+  chrome.runtime.sendMessage({tabOpened: true}, function() {
+    console.log("sending message to open new tab");
+  });
 });

@@ -27,3 +27,10 @@ chrome.omnibox.onInputEntered.addListener(function(text, disposition) {
     arr
   });
 });
+
+chrome.runtime.onMessage.addListener(function(message) {
+  console.log("message recieved: " + message.tabOpened);
+  if (message.tabOpened) {
+    chrome.tabs.create({"url": "terminal_tab.html"});
+  }
+});

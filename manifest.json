@@ -8,8 +8,8 @@
 
   "content_scripts": [
     {
-      "matches": ["http://*/*"],
-      "css": ["content_scripts/parse.css"],
+      "matches": ["http://*/*",
+                  "https://*/*"],
       "js": ["content_scripts/jquery.min.js", "content_scripts/main.js"]
     }
   ],

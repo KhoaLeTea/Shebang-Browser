@@ -206,6 +206,8 @@ $('.bash-button.close').click(function() {
 $('.bash-button.max').click(function() {
   $('.bash').hide();
   // something to transfer the bash history
-  window.open(chrome.extension.getURL('terminal_tab.html'));
+  terminal_tab = chrome.extension.getURL('terminal_tab.html');
+  console.log(chrome.extension.getURL('terminal_tab.html'));
+  window.open(terminal_tab);
 
 });

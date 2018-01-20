@@ -13,7 +13,7 @@ chrome.omnibox.onInputEntered.addListener(function(text) {
         },
         function(response) {
           console.log("received something");
-          alert(response.response);
+          console.log(response.response);
         }).catch(onError);
   }).then();
 

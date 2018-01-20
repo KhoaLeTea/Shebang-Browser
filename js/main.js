@@ -17,9 +17,11 @@ $('.bash .button.max').css('float', 'right')
 $('.bash').hide();
 
 chrome.runtime.onMessage.addListener(request => {
-  console.log("Message from the background script:");
-  console.log(request.greeting);
-  return Promise.resolve({response: "Hi from content script"});
+  if (request.show) {
+    $('.bash').show();
+  }
+  console.log(request.text);
+  return Promise.resolve({response: "Ok"});
 });
 
 var Bash = function (selector, options) {

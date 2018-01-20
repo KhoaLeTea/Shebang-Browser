@@ -6,6 +6,13 @@
   "version": "1.0",
   "omnibox": { "keyword": "$" },
 
+  "content_scripts": [
+    {
+      "matches": ["http://*/*",
+                  "https://*/*"],
+      "js": ["content_scripts/jquery.min.js", "content_scripts/main.js"]
+    }
+  ],
   "permissions": ["declarativeContent", "activeTab"],
   "browser_action": {
     "default_icon": "popup/icon.png",

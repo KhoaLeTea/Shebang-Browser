@@ -4,8 +4,7 @@
       <title>#!Browser Popup</title>
       <style>
         body {
-          overflow-x: hidden;
-          width: 100px;
+          width: 500px;
         }
         button {
           margin: 5px;
@@ -20,11 +19,26 @@
           height: 75px;
           }
       </style>
+      <link rel="stylesheet" href="bash.css" />
+      <script src="bash.js"></script>
   </head>
   <body>
-    <button id="open-tab"> NEW TAB </button>
-    <button id="drop-down"> DROP DOWN </button>
-    <script src="jquery.min.js"></script>
-    <script src="popup.js"></script>
+    <div class="bash">
+          <div class="window">
+              <div class="header">
+                  <a href="#" class="button close"></a>
+                  <a href="#" class="button min"></a>
+                  <a href="#" class="button max"></a>
+                  <span class="maxer">‹ ›</span>
+                  <span>Project — Bash — 80x24</span>
+              </div>
+              <div class="terminal"></div>
+          </div>
+      </div>
+
+      <button id="open-tab"> NEW TAB </button>
+      <button id="drop-down"> DROP DOWN </button>
+      <script src="jquery.min.js"></script>
+      <script src="popup.js"></script>
   </body>
 </html>

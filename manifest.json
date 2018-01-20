@@ -5,22 +5,22 @@
   "description": "Turns search bar into a Bash terminal.",
   "version": "1.0",
   "background": {
-        "scripts": [ "background.js"],
-        "persistent": false
+        "scripts": ["js/background.js"],
+        "persistent": true
   },
   "omnibox": { "keyword": "$" },
 
   "content_scripts": [
     {
-      "matches": ["http://*/*",
-                  "https://*/*"],
-      "js": ["content_scripts/jquery.min.js", "content_scripts/main.js"]
+      "matches": ["<all_urls>"],
+      "js": ["js/jquery.min.js", "js/bash.js", "js/main.js"],
+      "css": ["css/bash.css"]
     }
   ],
-  "permissions": ["declarativeContent", "activeTab"],
+  "permissions": ["declarativeContent", "activeTab", "tabs"],
   "browser_action": {
-    "default_icon": "popup/icon.png",
+    "default_icon": "img/icon.png",
     "default_title": "#!Browser",
-    "default_popup": "popup/popup.html"
+    "default_popup": "popup.html"
   }
 }

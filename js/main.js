@@ -115,7 +115,6 @@ var Bash = function (selector, options) {
     };
 
     this.start = function () {
-        alert(history.length);
         // print out history if the length is not 0
         if (history.length != 0) {
           for (var i=0; i < history.length; i++) {

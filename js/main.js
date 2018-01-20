@@ -179,7 +179,6 @@ var Bash = function (selector, options) {
             self.start();
         }
     };
-
 };
 
 var container = document.querySelector('.bash');

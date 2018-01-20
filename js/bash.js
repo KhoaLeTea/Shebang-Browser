@@ -1,6 +1,5 @@
 /*jslint browser:true*/
 
-
 var Bash = function (selector, options) {
 
     'use strict';
@@ -102,7 +101,7 @@ var Bash = function (selector, options) {
         alert(history.length);
         // print out history if the length is not 0
         if (history.length != 0) {
-          for (var i=0, i < history.length; i++) {
+          for (var i=0; i < history.length; i++) {
             self.post(history[i], 0);
           }
         }

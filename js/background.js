@@ -1,6 +1,6 @@
 console.log("Hello from the #!Browser");
 
-chrome.omnibox.onInputEntered.addListener(function(text) {
+chrome.omnibox.onInputEntered.addListener(function(text, suggest) {
   chrome.tabs.query({
       active: true,
       currentWindow: true

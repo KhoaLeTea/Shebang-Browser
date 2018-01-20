@@ -170,6 +170,7 @@ var Bash = function (selector, options) {
         chrome.storage.sync.get('history', function (result) {
             history = result.history;
         });
+        // todo: read history and execute anything in the history
         if (demo && func) {
             func(self, function () {
                 return true;

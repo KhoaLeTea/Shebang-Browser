@@ -9,7 +9,6 @@ $('.bash .window .header').append("<a href=\"#\" class=\"bash-button max\"></a>"
 $('.bash .window .header').append("<br/>")
 $('.bash .window').append("<div class=\"terminal\"></div>");
 
-
 $('.bash').hide();
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {

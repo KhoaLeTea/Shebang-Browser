@@ -13,7 +13,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["js/jquery.min.js", "js/bash.js", "js/main.js"],
+      "js": ["js/jquery.min.js", "js/main.js"],
       "css": ["css/bash.css"]
     }
   ],

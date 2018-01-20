@@ -13,22 +13,15 @@ $('.bash').css('z-index', '99999');
 $('.bash .button.max').css('float', 'right')
 $('.bash').hide();
 
-chrome.runtime.onMessage.addListener(request => {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.show) {
     $('.bash').show();
   }
-  console.log(request.text);
-  return Promise.resolve({
-    status: "Ok"
-  });
+  sendResponse({response: "Ok"});
 });
 
-/*jslint browser:true*/
-
 var Bash = function (selector, options) {
-
     'use strict';
-
         // Selectors
     var command = selector.querySelector('.command'),
         terminal = selector.querySelector('.terminal'),
@@ -188,7 +181,6 @@ var Bash = function (selector, options) {
         }
     };
 };
-
 
 var container = document.querySelector('.bash');
 var bsh = new Bash(container, {

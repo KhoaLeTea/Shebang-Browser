@@ -14,7 +14,7 @@
     }
   ],
   "permissions": ["declarativeContent", "activeTab"],
-  "page_action": {
+  "browser_action": {
     "default_icon": "popup/icon.png",
     "default_title": "#!Browser",
     "default_popup": "popup/popup.html"

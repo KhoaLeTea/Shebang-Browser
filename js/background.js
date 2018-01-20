@@ -23,15 +23,28 @@ chrome.omnibox.onInputEntered.addListener(function(text) {
       currentWindow: true
   }, function(tabs) {
       chrome.tabs.sendMessage(
-        552,
+        tabs[0].id,
         {
           show: true,
           text: text
         },
         function() {
           console.log("Message from the content script:");
-          console.log(response.response);
+          console.log(response.status);
         }).catch(onError);
-  });
+  }).then();
 
+});
+
+
+var history = [];
+var historySize = 0;
+
+chrome.omnibox.onInputEntered.addListener(function (text, suggest) {
+  history.append(text);
+  historySize+=1;
+  // the universal storage for all terminal inputs and outputs
+  chrome.storage.sync.set({'history':
+    history
+  });
 });

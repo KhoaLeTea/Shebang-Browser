@@ -1,0 +1,26 @@
+{
+    "manifest_version": 2,
+
+    "name": "#!Browser",
+    "description": "Turns search bar into a Bash terminal.",
+    "version": "1.0",
+
+    "content_scripts": [
+      {
+        "matches": [],
+        "css": ["content_scripts/parse.css"],
+        "js": [ "content_scripts/jquery.min.js",
+                "content_scripts/main.js"
+        ]
+      }
+    ],
+    "permissions": [
+      "declarativeContent",
+      "activeTab"
+    ],
+    "page_action": {
+      "default_icon": "popup/icon.png",
+      "default_title": "#!Browser",
+      "default_popup": "popup/popup.html"
+    }
+}

@@ -1,5 +1,9 @@
 console.log("Hello from the #!Browser");
 
+chrome.omnibox.onInputChanged.addListener(function (text, suggest) {
+
+});
+
 chrome.runtime.onInstalled.addListener(function() {
 
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {

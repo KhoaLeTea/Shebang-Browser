@@ -1,5 +1,8 @@
 console.log("Hello from the #!Browser");
 
+var arr = [];
+var historySize = 0;
+
 chrome.omnibox.onInputEntered.addListener(function(text, disposition) {
   chrome.tabs.query({
       active: true,
@@ -15,18 +18,10 @@ chrome.omnibox.onInputEntered.addListener(function(text, disposition) {
           console.log("message recieve status: " + response.response);
         });
   });
-
-});
-
-
-var history = [];
-var historySize = 0;
-
-chrome.omnibox.onInputEntered.addListener(function (text, suggest) {
-  history.append(text);
-  historySize+=1;
+  arr.push(text);
+  historySize = arr.length;
   // the universal storage for all terminal inputs and outputs
   chrome.storage.sync.set({'history':
-    history
+    arr
   });
 });

@@ -1,5 +1,7 @@
 /*jslint browser:true*/
 
+console.log("bash.js LOADED");
+
 var Bash = function (selector, options) {
 
     'use strict';
@@ -165,4 +167,4 @@ var Bash = function (selector, options) {
 
     this.initialise();
 
-};
+}

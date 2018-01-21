@@ -11,13 +11,6 @@ $('.bash .window').append("<div class=\"terminal\"></div>");
 
 $('.bash').hide();
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.show) {
-    $('.bash').show();
-  }
-  sendResponse({status: "Ok"});
-});
-
 var Bash = function (selector, options) {
     'use strict';
         // Selectors
@@ -185,6 +178,8 @@ var Bash = function (selector, options) {
 };
 
 var container = document.querySelector('.bash');
+
+// list of commands
 var commands = {"grunt" : function(bash, next) {
     bash.post('Running "jshint:gruntfile" (jshint) task', 0, false, true);
     bash.post('>> 1 file lint free.', 500, false, true);
@@ -202,10 +197,28 @@ var commands = {"grunt" : function(bash, next) {
             return next();
         });
     }};
+
+// new bash instance
 var bsh = new Bash(container, {
   name: 'grunt',
   prompt: '$',
-  commandList: commands 
+  commandList: commands
+});
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.show) {
+    $('.bash').show();
+  }
+  // make sure that the request is being executed inside of terminal
+  var text = request.text;
+  if (text in commands) {
+    // get the corresponding response
+    var commandFunction = commands[text]
+    commandFunction(bsh, function () {
+        bsh.reset();
+    });
+  }
+  sendResponse({status: "Ok"});
 });
 
 $('.bash-button.close').click(function() {

@@ -1,4 +1,4 @@
-$('body').append("<div class=\"outer bash\"><div class=\"moveable\"></div></div>");
+$('body').append("<div class=\"bash moveable\"></div>");
 $('.bash').append("<div class=\"window\"></div>");
 $('.bash .window').append("<div class=\"header\"></div>");
 
@@ -10,37 +10,28 @@ $('.bash .window').append('<div class="terminal"></div>');
 
 $('.bash').hide();
 
-var movable = document.querySelector('.bash .moveable');
+var movable = document.querySelector('.bash.moveable');
 
 
 // target elements with the "draggable" class
 interact(movable)
 .draggable({
-    onmove: window.dragMoveListener,
+    // enable inertial throwing
+    inertia: true,
+    // keep the element within the area of it's parent
     restrict: {
-      restriction: 'parent',
+      restriction: "parent",
+      endOnly: true,
       elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
     },
-  })
-  .resizable({
-    // resize from all edges and corners
-    edges: { left: true, right: true, bottom: true, top: true },
+    // enable autoScroll
+    autoScroll: true,
 
-    // keep the edges inside the parent
-    restrictEdges: {
-      outer: 'parent',
-      endOnly: true,
-    },
-
-    // minimum size
-    restrictSize: {
-      min: { width: 500, height: 300 },
-    },
-
-    inertia: true,
+    // call this function on every dragmove event
+    onmove: dragMoveListener
   });
 
-  var container = document.querySelector('.bash');
+var container = document.querySelector('.bash');
 
 // list of commands
 var commands = {

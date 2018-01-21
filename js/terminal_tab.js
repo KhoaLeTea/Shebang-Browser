@@ -154,9 +154,9 @@ var Bash = function(selector, options) {
         if (help) {
           self.post(help, 150, false, true);
         }
-        // setTimeout(function() {
-        //   self.reset();
-        // }, 300);
+        setTimeout(function() {
+          self.reset();
+        }, 300);
       }
     );
   };
@@ -307,12 +307,25 @@ chrome.storage.sync.get('history', function(result) {
   if (result.history != 0) {
     arr = result.history;
     for (var i = 0; i < history.length; i++) {
-      var command = commands[arr[i]];
-      cb = function() {
-        bsh.reset();
-      };
-      bsh.post(arr[i], 0);
-      command(bsh, cb);
+      if (arr[i] in commands) {
+        var command = commands[arr[i]];
+        cb = function() {
+          bsh.reset();
+        };
+        bsh.post(arr[i], 0);
+        command(bsh, cb);
+      } else {
+        bsh.post(
+          '-bash: ' + arr[i].split(' ')[0] + ': command not found',
+          0,
+          false,
+          true,
+          function() {
+            bsh.reset();
+            history.push(request);
+          }
+        );
+      }
     }
   } else {
     bsh.initialise();

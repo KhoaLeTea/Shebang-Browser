@@ -154,9 +154,9 @@ var Bash = function(selector, options) {
         if (help) {
           self.post(help, 150, false, true);
         }
-        setTimeout(function() {
-          self.reset();
-        }, 300);
+        // setTimeout(function() {
+        //   self.reset();
+        // }, 300);
       }
     );
   };
@@ -309,13 +309,11 @@ chrome.storage.sync.get('history', function(result) {
     for (var i = 0; i < history.length; i++) {
       var command = commands[arr[i]];
       cb = function() {
-        console.log('call next');
+        bsh.reset();
       };
       bsh.post(arr[i], 0);
       command(bsh, cb);
     }
-    // give the prompt to enter something
-    bsh.prompt();
   } else {
     bsh.initialise();
   }

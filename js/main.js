@@ -13,7 +13,7 @@ $('.bash .window').append('<div class="terminal"></div>');
 $('.bash').hide();
 
 var movable = document.querySelector('.bash.moveable');
-
+var historyText = [];
 function dragMoveListener(event) {
   var target = event.target,
     // keep the dragged position in the data-x/data-y attributes
@@ -115,9 +115,37 @@ var commands = {
     );
   },
   ls: function(bash, next) {
-    bash.post('Look at all of these directories', 0, false, true, function() {
-      return next();
-    });
+    bash.post(
+      'Documents Pictures		VirtualBox		VM Desktop\n Google Drive		Music			Udemy			curc-bench		nltk_data',
+      0,
+      false,
+      true,
+      function() {
+        return next();
+      }
+    );
+  },
+  'touch test.txt': function(bash, next) {
+    bash.post(
+      'Documents Pictures		VirtualBox		VM Desktop\n Google Drive		Music			Udemy			curc-bench		nltk_data\n test.txt',
+      0,
+      false,
+      true,
+      function() {
+        return next();
+      }
+    );
+  },
+  'rm test.txt': function(bash, next) {
+    bash.post(
+      'Documents Pictures		VirtualBox		VM Desktop\n Google Drive		Music			Udemy			curc-bench		nltk_data',
+      0,
+      false,
+      true,
+      function() {
+        return next();
+      }
+    );
   }
 };
 
@@ -140,6 +168,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     commandFunction(bsh, function() {
       bsh.reset();
     });
+    chrome.storage.sync.get('history', function(response) {
+      historyText = response.history;
+    });
+    historyText.push(text);
+    chrome.storage.sync.set({ history: historyText });
   } else {
     bsh.reset();
   }

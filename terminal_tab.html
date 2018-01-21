@@ -2,21 +2,42 @@
 <html>
   <head>
       <title>#!Browser Popup</title>
+      <link rel="stylesheet" href="css/bash.css" />
       <style>
 
+      .bash {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+      }
+
+      .bash .terminal {
+          position: fixed;
+          width: 100%;
+          height: 100%;
+          font-family:'Monaco', monospace;
+          font-size:12px;
+          line-height:16px;
+          color:#fff;
+          background:#000;
+          border-radius: 0;
+      }
+
+      .bash .window {
+          /* width:500px; */
+          /* margin:0 auto; */
+          width: 100%;
+          height: 100%;
+          position: fixed;
+      }
+
       </style>
-      <link rel="stylesheet" href="css/bash.css" />
-      <!--script src="js/bash.js"></script-->
   </head>
   <body>
     <div class="bash">
           <div class="window">
-              <div class="header">
-                  <a href="#" class="button close"></a>
-                  <a href="#" class="button min"></a>
-                  <a href="#" class="button max"></a>
-                  <br />
-              </div>
               <div class="terminal"></div>
           </div>
       </div>

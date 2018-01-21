@@ -1,17 +1,9 @@
-<<<<<<< HEAD
 $('body').append("<div class=\"outer bash\"><div class=\"moveable\"></div></div>");
 $('.bash').append("<div class=\"window\"></div>");
 $('.bash .window').append("<div class=\"header\"></div>");
-=======
-$('body').append('<div class="bash"></div>');
-$('.bash').append('<div class="window"></div>');
-$('.bash .window').append('<div class="header"></div>');
->>>>>>> 8194d20b97eb3169173c7250208a330ef72128af
 
 $('.bash .window .header').append('<a href="#" class="bash-button close"></a>');
-$('.bash .window .header').append(
-  '<a href="#" class="bash-button disabled min"></a>'
-);
+$('.bash .window .header').append('<a href="#" class="bash-button disabled min"></a>');
 $('.bash .window .header').append('<a href="#" class="bash-button max"></a>');
 $('.bash .window .header').append('<br/>');
 $('.bash .window').append('<div class="terminal"></div>');

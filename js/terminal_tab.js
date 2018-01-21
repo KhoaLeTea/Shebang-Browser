@@ -1,196 +1,300 @@
 // message send to background to get all the object
 // message returns the history object
 // bash.js
-var Bash = function (selector, options) {
-    'use strict';
-        // Selectors
-    var command = selector.querySelector('.command'),
-        terminal = selector.querySelector('.terminal'),
+var Bash = function(selector, options) {
+  'use strict';
+  // Selectors
+  var command = selector.querySelector('.command'),
+    terminal = selector.querySelector('.terminal'),
+    // Options
+    computer = options.computer || 'ttys000',
+    help = options.help || undefined,
+    prompt = options.prompt || 'user@home:~$',
+    name = options.name || undefined,
+    func = options.function || undefined,
+    demo = options.demo || false,
+    //ex: {"ls": function(){self.post()}}
+    commands = options.commandList || undefined,
+    // Variables
+    history = [],
+    self = this;
 
-        // Options
-        computer = options.computer || 'ttys000',
-        help = options.help || undefined,
-        prompt = options.prompt || 'user@home:~$',
-        name = options.name || undefined,
-        func = options.function || undefined,
-        demo = options.demo || false,
-        //ex: {"ls": function(){self.post()}}
-        commands = options.commandList || undefined,
+  if (!String.prototype.trim) {
+    String.prototype.trim = function() {
+      return this.replace(/^[\s\xA0]+|[\s\xA0]+$/g, '');
+    };
+  }
 
-        // Variables
-        history = [],
-        self = this;
+  this.time = function() {
+    var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ],
+      now = new Date(),
+      day = days[now.getDay()],
+      month = months[now.getMonth()],
+      date = now.getDate(),
+      hours = (now.getHours() < 10 ? '0' : '') + now.getHours(),
+      minutes = (now.getMinutes() < 10 ? '0' : '') + now.getMinutes(),
+      seconds = (now.getSeconds() < 10 ? '0' : '') + now.getSeconds();
+    return (
+      day +
+      ' ' +
+      month +
+      ' ' +
+      date +
+      ' ' +
+      hours +
+      ':' +
+      minutes +
+      ':' +
+      seconds
+    );
+  };
 
-    if (!String.prototype.trim) {
-        String.prototype.trim = function () {
-            return this.replace(/^[\s\xA0]+|[\s\xA0]+$/g, '');
-        };
+  this.createPrompt = function(string, index) {
+    var symbol = document.createElement('span');
+    symbol.className = 'prompt prompt-' + index;
+    symbol.innerHTML = string.trim() + ' ';
+    return symbol;
+  };
+
+  this.addPrompts = function(element) {
+    var i;
+    if (typeof prompt === 'string') {
+      element.appendChild(self.createPrompt(prompt), 0);
+    } else {
+      for (i = 0; i < prompt.length; i += 1) {
+        element.appendChild(self.createPrompt(prompt[i], i));
+      }
     }
+  };
 
-    this.time = function () {
-        var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-            months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            now = new Date(),
-            day = days[now.getDay()],
-            month = months[now.getMonth()],
-            date = now.getDate(),
-            hours = (now.getHours() < 10 ? '0' : '') + now.getHours(),
-            minutes = (now.getMinutes() < 10 ? '0' : '') + now.getMinutes(),
-            seconds = (now.getSeconds() < 10 ? '0' : '') + now.getSeconds();
-        return day + ' ' + month + ' ' + date + ' ' + hours + ':' + minutes + ':' + seconds;
-    };
+  this.reset = function() {
+    var header = document.createElement('p'),
+      input = document.createElement('span');
+    self.addPrompts(header);
+    input.className = 'command';
+    input.contentEditable = 'true';
+    header.appendChild(input);
+    terminal.appendChild(header);
+    terminal.scrollTop = terminal.scrollHeight;
+    command = selector.querySelector('.command');
+    command.focus();
+  };
 
-    this.createPrompt = function (string, index) {
-        var symbol = document.createElement('span');
-        symbol.className = 'prompt prompt-' + index;
-        symbol.innerHTML = string.trim() + ' ';
-        return symbol;
-    };
+  this.post = function(message, delay, symbol, feedback, next) {
+    var output;
+    setTimeout(function() {
+      output = document.createElement('p');
+      if (feedback) {
+        output.className = 'feedback';
+      }
+      if (demo && symbol) {
+        self.addPrompts(output);
+      }
+      output.innerHTML = output.innerHTML + ' ' + message;
+      terminal.appendChild(output);
+      terminal.scrollTop = terminal.scrollHeight;
+      if (next) {
+        return next();
+      }
+    }, delay);
+  };
 
-    this.addPrompts = function (element) {
-        var i;
-        if (typeof prompt === 'string') {
-            element.appendChild(self.createPrompt(prompt), 0);
-        } else {
-            for (i = 0; i < prompt.length; i += 1) {
-                element.appendChild(self.createPrompt(prompt[i], i));
-            }
+  self.clear = function(next) {
+    var spacer = document.createElement('br');
+    spacer.className = 'spacer';
+    spacer.style.height = terminal.clientHeight - 40 + 'px';
+    terminal.appendChild(spacer);
+    return next() || true;
+  };
+
+  this.start = function() {
+    // print out history if the length is not 0
+    if (history.length != 0) {
+      for (var i = 0; i < history.length; i++) {
+        self.post(history[i], 0);
+      }
+    }
+    self.post(
+      'Last login: ' + this.time() + ' on ' + computer,
+      300,
+      false,
+      true,
+      function() {
+        if (help) {
+          self.post(help, 150, false, true);
         }
-    };
+        setTimeout(function() {
+          self.reset();
+        }, 300);
+      }
+    );
+  };
 
-    this.reset = function () {
-        var header = document.createElement('p'),
-            input = document.createElement('span');
-        self.addPrompts(header);
-        input.className = 'command';
-        input.contentEditable = 'true';
-        header.appendChild(input);
-        terminal.appendChild(header);
-        terminal.scrollTop = terminal.scrollHeight;
-        command = selector.querySelector('.command');
-        command.focus();
-    };
+  this.prompt = function() {
+    self.post(
+      'Last login: ' + this.time() + ' on ' + computer,
+      300,
+      false,
+      true,
+      function() {
+        if (help) {
+          self.post(help, 150, false, true);
+        }
+        // setTimeout(function() {
+        //   self.reset();
+        // }, 300);
+      }
+    );
+  };
 
-    this.post = function (message, delay, symbol, feedback, next) {
-        var output;
-        setTimeout(function () {
-            output = document.createElement('p');
-            if (feedback) {
-                output.className = 'feedback';
-            }
-            if (demo && symbol) {
-                self.addPrompts(output);
-            }
-            output.innerHTML = output.innerHTML + ' ' + message;
-            terminal.appendChild(output);
-            terminal.scrollTop = terminal.scrollHeight;
-            if (next) {
-                return next();
-            }
-        }, delay);
-    };
-
-    self.clear = function (next) {
-        var spacer = document.createElement('br');
-        spacer.className = 'spacer';
-        spacer.style.height = terminal.clientHeight - 40 + 'px';
-        terminal.appendChild(spacer);
-        return next() || true;
-    };
-
-    this.start = function () {
-        // print out history if the length is not 0
-        if (history.length != 0) {
-          for (var i=0; i < history.length; i++) {
-            self.post(history[i], 0);
+  terminal.addEventListener('keydown', function(e) {
+    var key = e.keyCode,
+      request,
+      message;
+    if (key === 13) {
+      e.preventDefault();
+      command.removeAttribute('contenteditable');
+      request = command.innerHTML.trim();
+      command.removeAttribute('class');
+      if (request === '') {
+        self.reset();
+      } else if (request in commands) {
+        var commandFunction = commands[request];
+        commandFunction(self, function() {
+          self.reset();
+          history.push(request);
+        });
+      } else if (request === 'clear') {
+        self.clear(function() {
+          self.reset();
+        });
+      } else if (request.split(' ')[0] === 'echo') {
+        message = request
+          .split(' ')
+          .splice(1)
+          .join(' ');
+        self.post(
+          message === '' ? '&nbsp;' : message,
+          0,
+          false,
+          true,
+          function() {
+            self.reset();
+            history.push(request);
           }
-        }
-        self.post('Last login: ' + this.time() + ' on ' + computer, 300, false, true, function () {
-            if (help) {
-                self.post(help, 150, false, true);
-            }
-            setTimeout(function () {
-                self.reset();
-            }, 300);
-        });
-    };
-
-    this.prompt = function () {
-        self.post('Last login: ' + this.time() + ' on ' + computer, 300, false, true, function () {
-            if (help) {
-                self.post(help, 150, false, true);
-            }
-            setTimeout(function () {
-                self.reset();
-            }, 300);
-        });
+        );
+      } else {
+        self.post(
+          '-bash: ' + request.split(' ')[0] + ': command not found',
+          0,
+          false,
+          true,
+          function() {
+            self.reset();
+            history.push(request);
+          }
+        );
+      }
     }
+  });
 
-    terminal.addEventListener('keydown', function (e) {
-        var key = e.keyCode,
-            request,
-            message;
-        if (key === 13) {
-            e.preventDefault();
-            command.removeAttribute('contenteditable');
-            request = command.innerHTML.trim();
-            command.removeAttribute('class');
-            if (request === "") {
-                self.reset();
-            } else if (request in commands) {
-                var commandFunction = commands[request]
-                commandFunction(self, function () {
-                    self.reset();
-                    history.push(request);
-                });
-            } else if (request === 'clear') {
-                self.clear(function () {
-                    self.reset();
-                });
-            } else if (request.split(' ')[0] === 'echo') {
-                message = request.split(' ').splice(1).join(' ');
-                self.post(message === '' ? '&nbsp;' : message, 0, false, true, function () {
-                    self.reset();
-                    history.push(request);
-                });
-            } else {
-                self.post('-bash: ' + request.split(' ')[0] + ': command not found', 0, false, true, function () {
-                    self.reset();
-                    history.push(request);
-                });
-            }
-        }
-    });
-
-    this.initialise = function () {
-        // chrome.storage.sync.get('history', function (result) {
-        //     history = result.history;
-        // });
-        self.start();
-    };
+  this.initialise = function() {
+    // chrome.storage.sync.get('history', function (result) {
+    //     history = result.history;
+    // });
+    self.start();
+  };
 };
 
 var container = document.querySelector('.bash');
 
 // list of commands
-var commands = {"grunt" : function(bash, next) {
-    bash.post('Running "jshint:gruntfile" (jshint) task', 0, false, true);
-    bash.post('>> 1 file lint free.', 500, false, true);
-    bash.post('&nbsp;', 600);
-    bash.post('Running "uglify:dist" (uglify) task', 700, false, true);
-    bash.post('File "dist/scripts.min.js" created.', 1600, false, true);
-    bash.post('Uncompressed size: 389 bytes.', 1800, false, true);
-    bash.post('&nbsp;', 1900);
-    bash.post('Done, without errors.', 2000, false, true, function() {
+var commands = {
+  grunt: function(bash, next) {
+    bash.post(
+      'Running "jshint:gruntfile" (jshint) task',
+      0,
+      false,
+      true,
+      bash.post(
+        '>> 1 file lint free.',
+        500,
+        false,
+        true,
+        bash.post(
+          '&nbsp;',
+          600,
+          false,
+          true,
+          bash.post(
+            'Running "uglify:dist" (uglify) task',
+            700,
+            false,
+            true,
+            bash.post(
+              'Running "uglify:dist" (uglify) task',
+              700,
+              false,
+              true,
+              bash.post(
+                'Running "uglify:dist" (uglify) task',
+                700,
+                false,
+                true,
+                bash.post(
+                  'File "dist/scripts.min.js" created.',
+                  1600,
+                  false,
+                  true,
+                  bash.post(
+                    'Uncompressed size: 389 bytes.',
+                    1800,
+                    false,
+                    true,
+                    bash.post(
+                      '&nbsp;',
+                      1900,
+                      false,
+                      true,
+                      bash.post(
+                        'Done, without errors.',
+                        2000,
+                        false,
+                        true,
+                        function() {
+                          return next();
+                        }
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    );
+  },
+  ls: function(bash, next) {
+    bash.post('Look at all of these directories', 0, false, true, function() {
       return next();
     });
-  },
-    "ls" : function(bash, next){
-        console.log(next);
-        bash.post('Look at all of these directories', 0, false, true, function(){
-          return next();
-        });
-    }};
+  }
+};
 
 var bsh = new Bash(container, {
   name: 'grunt',
@@ -199,18 +303,17 @@ var bsh = new Bash(container, {
 });
 
 chrome.storage.sync.get('history', function(result) {
+  console.log(result);
   if (result.history != 0) {
     arr = result.history;
     for (var i = 0; i < history.length; i++) {
-      var command = commands[arr[i]]
-      cb = function () {
-        console.log('call next');
-      }
+      var command = commands[arr[i]];
+      cb = function() {
+        bsh.reset();
+      };
       bsh.post(arr[i], 0);
       command(bsh, cb);
     }
-    // give the prompt to enter something
-    bsh.prompt();
   } else {
     bsh.initialise();
   }

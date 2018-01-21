@@ -3,5 +3,5 @@
 // bash.js
 
 chrome.storage.sync.get('history', function(result) {
-  alert(result)
+  alert(result)l
 });
